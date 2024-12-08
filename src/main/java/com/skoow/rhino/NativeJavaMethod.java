@@ -30,9 +30,9 @@ public class NativeJavaMethod extends BaseFunction {
 	 * No clear "easy" conversion
 	 */
 	private static final int PREFERENCE_AMBIGUOUS = 3;
-	private static final boolean debug = false;
+	public static final boolean debug = false;
 
-	static String scriptSignature(Object[] values) {
+	protected static String scriptSignature(Object[] values) {
 		StringBuilder sig = new StringBuilder();
 		for (int i = 0; i != values.length; ++i) {
 			Object value = values[i];
@@ -297,7 +297,7 @@ public class NativeJavaMethod extends BaseFunction {
 		return totalPreference;
 	}
 
-	private static void printDebug(String msg, MemberBox member, Object[] args) {
+	protected static void printDebug(String msg, MemberBox member, Object[] args) {
 		if (debug) {
 			StringBuilder sb = new StringBuilder();
 			sb.append(" ----- ");
@@ -319,12 +319,12 @@ public class NativeJavaMethod extends BaseFunction {
 	private transient final CopyOnWriteArrayList<ResolvedOverload> overloadCache = new CopyOnWriteArrayList<>();
 	public transient MemberBox[] methods;
 
-	NativeJavaMethod(MemberBox[] methods) {
+	public NativeJavaMethod(MemberBox[] methods) {
 		this.functionName = methods[0].getName();
 		this.methods = methods;
 	}
 
-	NativeJavaMethod(MemberBox[] methods, String name) {
+	public NativeJavaMethod(MemberBox[] methods, String name) {
 		this.functionName = name;
 		this.methods = methods;
 	}
@@ -480,7 +480,7 @@ public class NativeJavaMethod extends BaseFunction {
 		return wrapped;
 	}
 
-	int findCachedFunction(Context cx, Object[] args) {
+	protected int findCachedFunction(Context cx, Object[] args) {
 		if (methods.length > 1) {
 			for (ResolvedOverload ovl : overloadCache) {
 				if (ovl.matches(args)) {

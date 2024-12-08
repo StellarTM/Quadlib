@@ -32,9 +32,11 @@ base {
 
 
 shadowJar {
-    dependencies {
+    // Убираем зависимости из final JAR
+    configurations = []
 
-    }
+    // Добавляем только исходники проекта
+    from sourceSets.main.output
 }
 
 java.toolchain.languageVersion = JavaLanguageVersion.of(17)

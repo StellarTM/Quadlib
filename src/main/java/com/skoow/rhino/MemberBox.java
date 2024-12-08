@@ -21,7 +21,7 @@ import java.lang.reflect.Modifier;
  * @author Igor Bukanov
  */
 
-public final class MemberBox {
+public class MemberBox {
 	private static Method searchAccessibleMethod(Method method, Class<?>[] params) {
 		int modifiers = method.getModifiers();
 		if (Modifier.isPublic(modifiers) && !Modifier.isStatic(modifiers)) {
@@ -61,13 +61,13 @@ public final class MemberBox {
 		return null;
 	}
 
-	transient Class<?>[] argTypes;
+	public transient Class<?>[] argTypes;
 	transient Object delegateTo;
-	transient boolean vararg;
+	public transient boolean vararg;
 	public transient Executable executable;
 	public transient WrappedExecutable wrappedExecutable;
 
-	MemberBox(Executable executable) {
+	public MemberBox(Executable executable) {
 		this.executable = executable;
 		this.argTypes = executable.getParameterTypes();
 		this.vararg = executable.isVarArgs();
@@ -102,7 +102,7 @@ public final class MemberBox {
 		return executable instanceof Constructor;
 	}
 
-	boolean isStatic() {
+	public boolean isStatic() {
 		return Modifier.isStatic(executable.getModifiers());
 	}
 
@@ -114,11 +114,11 @@ public final class MemberBox {
 		return wrappedExecutable != null ? wrappedExecutable.toString() : executable.getName();
 	}
 
-	Class<?> getDeclaringClass() {
+	public Class<?> getDeclaringClass() {
 		return executable.getDeclaringClass();
 	}
 
-	Class<?> getReturnType() {
+	public Class<?> getReturnType() {
 		return wrappedExecutable != null ? wrappedExecutable.getReturnType() : ((Method) executable).getReturnType();
 	}
 
@@ -145,7 +145,7 @@ public final class MemberBox {
 		return executable.toString();
 	}
 
-	Object invoke(Object target, Object[] args, Context cx, Scriptable scope) {
+	public Object invoke(Object target, Object[] args, Context cx, Scriptable scope) {
 		if (wrappedExecutable != null) {
 			try {
 				return wrappedExecutable.invoke(cx, scope, target, args);
