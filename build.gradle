@@ -32,11 +32,9 @@ base {
 
 
 shadowJar {
-    // Убираем зависимости из final JAR
-    configurations = []
-
-    // Добавляем только исходники проекта
-    from sourceSets.main.output
+    dependencies {
+        include(dependency("org.apache.commons:commons-text"))
+    }
 }
 
 java.toolchain.languageVersion = JavaLanguageVersion.of(17)
@@ -103,6 +101,7 @@ repositories {
 dependencies {
     minecraft "net.minecraftforge:forge:${minecraft_version}-${forge_version}"
 
+    implementation 'org.apache.commons:commons-text:1.10.0'
     annotationProcessor 'org.spongepowered:mixin:0.8.5:processor'
 }
 
