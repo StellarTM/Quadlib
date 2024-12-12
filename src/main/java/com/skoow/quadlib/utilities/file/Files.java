@@ -91,6 +91,16 @@ public class Files {
         }
         return null;
     }
+    public static byte[] readBytes(File f) {
+        try {
+            InputStream stream = inputStream(f);
+            byte[] bytes = stream.readAllBytes();
+            stream.close();
+            return bytes;
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
 
     public static void write(File f, String str) {
         try {

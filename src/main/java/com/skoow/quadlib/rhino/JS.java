@@ -7,14 +7,13 @@ import com.skoow.rhino.*;
 
 import java.lang.reflect.Array;
 import java.lang.reflect.Field;
-import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.HashMap;
 
 public class JS {
     public static Pair<Context, ScriptableObject> begin() {
         Context context = Context.enter();
-        ScriptableObject scope = context.initSafeStandardObjects();
+        ScriptableObject scope = context.initStandardObjects();
         return new Pair<>(context,scope);
     };
     public static void run(Context context, ScriptableObject scope, String body, String filename) {

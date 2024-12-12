@@ -1,6 +1,7 @@
 package com.skoow.quadlib.utilities.struct;
 
 import com.skoow.quadlib.utilities.func.Boolf;
+import com.skoow.quadlib.utilities.func.Cons;
 
 public class ObjectTree<T> {
     protected Seq<T> childObjects = Seq.with();
@@ -71,6 +72,12 @@ public class ObjectTree<T> {
 
     private boolean is(String name) {
         return this.name.equals(name);
+    }
+
+    public <A> void each(Class<A> as, Cons<A> cons) {
+        children().each(e -> {
+            if(e.getClass().equals(as)) cons.get((A) e);
+        });
     }
 
     public void clear() {

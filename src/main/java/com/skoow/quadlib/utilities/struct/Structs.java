@@ -14,6 +14,11 @@ public class Structs {
         if(a == null) return b;
         return a;
     }
+    public static String or(String a, String b) {
+        if(a == null) return b;
+        if(a.isBlank()) return b;
+        return a;
+    }
     public static <T,A> A safeGet(T a, Func<T,A> cb) {
         return safeGet(a,cb,nil());
     }
