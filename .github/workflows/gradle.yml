@@ -1,0 +1,69 @@
+# This workflow uses actions that are not certified by GitHub.
+# They are provided by a third-party and are governed by
+# separate terms of service, privacy policy, and support
+# documentation.
+# This workflow will build a Java project with Gradle and cache/restore any dependencies to improve the workflow execution time
+# For more information see: https://docs.github.com/en/actions/automating-builds-and-tests/building-and-testing-java-with-gradle
+
+name: Quadlib Build
+
+permissions:
+  pull-requests: write
+  issues: write
+  repository-projects: write
+
+on:
+  push:
+    branches:
+      - "**"
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+
+    steps:
+    - uses: actions/checkout@v4
+    - name: Set up JDK 17
+      uses: actions/setup-java@v4
+      with:
+        java-version: '17'
+        distribution: 'temurin'
+
+    # Configure Gradle for optimal use in GiHub Actions, including caching of downloaded dependencies.
+    # See: https://github.com/gradle/actions/blob/main/setup-gradle/README.md
+    - name: Setup Gradle
+      uses: gradle/actions/setup-gradle@417ae3ccd767c252f5661f1ace9f835f9654f2b5 # v3.1.0
+    - name: Change wrapper permissions
+      run: chmod +x ./gradlew
+
+    - name: Build Core
+      run: ./gradlew build --stacktrace
+
+    - name: Verify Core Build Output
+      run: ls -la ./build/libs
+
+    - name: Send JAR and additional files to Discord
+      env:
+        DISCORD_WEBHOOK_URL: ${{ secrets.DISCORD_WEBHOOK_URL }}
+      run: |
+        # Находим JAR файл из build/libs
+        JAR_FILE=$(ls build/libs/*.jar | head -n 1)  
+
+        # Находим все файлы в libs
+        ADDITIONAL_FILES=$(ls libs/* 2>/dev/null || echo "")
+
+        # Отправляем JAR файл
+        curl -F "payload_json={\"content\": \":worm: Quadlib ${{ github.event.head_commit.message }}\"}" \
+             -F "file=@${JAR_FILE}" \
+             $DISCORD_WEBHOOK_URL
+
+    - name: Upload Artifacts
+      uses: actions/upload-artifact@v4
+      with:
+        name: Qrix Engine
+        path: |
+          ./build/libs/*.jar
+          ./libs/*.jar

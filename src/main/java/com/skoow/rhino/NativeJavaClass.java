@@ -6,6 +6,8 @@
 
 package com.skoow.rhino;
 
+import com.skoow.quadlib.rhino.Alias;
+
 import java.lang.reflect.Array;
 import java.lang.reflect.Modifier;
 import java.util.Map;
@@ -170,6 +172,10 @@ public class NativeJavaClass extends NativeJavaObject implements Function {
 	@Override
 	public void put(Context cx, String name, Scriptable start, Object value) {
 		members.put(this, name, javaObject, value, true, cx);
+		Alias[] aliases = value.getClass().getAnnotationsByType(Alias.class);
+		for (Alias alias : aliases) {
+			members.put(this, alias.value(), javaObject, value, true, cx);
+		}
 	}
 
 	@Override

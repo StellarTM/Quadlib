@@ -27,6 +27,12 @@ public class JS {
                     ScriptableObject.putConstProperty(
                             scope,field.getName(),field.get(object),ctx
                     );
+                    Alias[] aliases = field.getAnnotationsByType(Alias.class);
+                    for (Alias alias : aliases) {
+                        ScriptableObject.putConstProperty(
+                                scope,alias.value(),field.get(object),ctx
+                        );
+                    }
                 } catch (IllegalAccessException e) {
 
                 }
@@ -37,6 +43,10 @@ public class JS {
                 if (!method.isAnnotationPresent(Scope.class)) continue;
                 mthds.putIfAbsent(method.getName(),Seq.with());
                 mthds.get(method.getName()).add(method);
+                Alias[] aliases = method.getAnnotationsByType(Alias.class);
+                for (Alias alias : aliases) {
+                    mthds.get(alias.value()).add(method);
+                }
             }
             mthds.forEach((k,v) -> {
                 Seq<MemberBox> members = Seq.with();

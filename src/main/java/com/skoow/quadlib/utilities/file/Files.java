@@ -92,13 +92,17 @@ public class Files {
         return null;
     }
     public static byte[] readBytes(File f) {
-        try {
-            InputStream stream = inputStream(f);
-            byte[] bytes = stream.readAllBytes();
-            stream.close();
-            return bytes;
+        try (InputStream stream = inputStream(f);
+             ByteArrayOutputStream buffer = new ByteArrayOutputStream()) {
+
+            byte[] chunk = new byte[8192];
+            int bytesRead;
+            while ((bytesRead = stream.read(chunk)) != -1) {
+                buffer.write(chunk, 0, bytesRead);
+            }
+            return buffer.toByteArray();
         } catch (IOException e) {
-            throw new RuntimeException(e);
+            throw new RuntimeException("Ошибка чтения файла: " + f.getName(), e);
         }
     }
 

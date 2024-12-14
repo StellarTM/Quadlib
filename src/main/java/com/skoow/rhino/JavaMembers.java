@@ -6,6 +6,7 @@
 
 package com.skoow.rhino;
 
+import com.skoow.quadlib.rhino.Alias;
 import com.skoow.rhino.util.HideFromJS;
 import com.skoow.rhino.util.RemapForJS;
 import com.skoow.rhino.util.RemapPrefixForJS;
@@ -720,6 +721,14 @@ public class JavaMembers {
 							if (!fieldMap.containsKey(info.name)) {
 								fieldMap.put(info.name, info);
 							}
+							Alias[] aliases = field.getAnnotationsByType(Alias.class);
+							for (Alias alias : aliases) {
+								if (!fieldMap.containsKey(alias.value())) {
+									FieldInfo info2 = new FieldInfo(field);
+									info2.name = alias.value();
+									fieldMap.put(info2.name, info2);
+								}
+							}
 						} catch (Exception ex) {
 							// ex.printStackTrace();
 						}
@@ -772,6 +781,14 @@ public class JavaMembers {
 
 							info = new MethodInfo(method);
 							methodMap.put(signature, info);
+
+							Alias[] aliases = method.getAnnotationsByType(Alias.class);
+							for (Alias alias : aliases) {
+								MethodSignature sign2 = new MethodSignature(alias.value(),method.getParameterCount() == 0 ? new Class<?>[0] : method.getParameterTypes());
+								MethodInfo info2 = new MethodInfo(method);
+								info2.name = alias.value();
+								methodMap.put(sign2, info2);
+							}
 						} catch (Exception ex) {
 							// ex.printStackTrace();
 						}

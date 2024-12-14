@@ -6,6 +6,7 @@
 
 package com.skoow.rhino;
 
+import com.skoow.quadlib.rhino.Alias;
 import com.skoow.rhino.util.Deletable;
 import com.skoow.rhino.util.JavaIteratorWrapper;
 import com.skoow.rhino.util.wrap.TypeWrapperFactory;
@@ -699,8 +700,16 @@ public class NativeJavaObject implements Scriptable, SymbolScriptable, Wrapper {
 		// we modify it in the prototype rather than copy it down.
 		if (prototype == null || members.has(name, false)) {
 			members.put(this, name, javaObject, value, false, cx);
+			Alias[] aliases = value.getClass().getAnnotationsByType(Alias.class);
+			for (Alias alias : aliases) {
+				members.put(this, alias.value(), javaObject, value, false, cx);
+			}
 		} else {
 			prototype.put(cx, name, prototype, value);
+			Alias[] aliases = value.getClass().getAnnotationsByType(Alias.class);
+			for (Alias alias : aliases) {
+				prototype.put(cx, alias.value(), prototype, value);
+			}
 		}
 	}
 
@@ -712,8 +721,16 @@ public class NativeJavaObject implements Scriptable, SymbolScriptable, Wrapper {
 		String name = symbol.toString();
 		if (prototype == null || members.has(name, false)) {
 			members.put(this, name, javaObject, value, false, cx);
+			Alias[] aliases = value.getClass().getAnnotationsByType(Alias.class);
+			for (Alias alias : aliases) {
+				members.put(this, alias.value(), javaObject, value, false, cx);
+			}
 		} else if (prototype instanceof SymbolScriptable) {
 			((SymbolScriptable) prototype).put(cx, symbol, prototype, value);
+			Alias[] aliases = value.getClass().getAnnotationsByType(Alias.class);
+			for (Alias alias : aliases) {
+				prototype.put(cx, alias.value(), prototype, value);
+			}
 		}
 	}
 

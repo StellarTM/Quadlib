@@ -76,7 +76,7 @@ public class ObjectTree<T> {
 
     public <A> void each(Class<A> as, Cons<A> cons) {
         children().each(e -> {
-            if(e.getClass().equals(as)) cons.get((A) e);
+            cons.get((A) e);
         });
     }
 
