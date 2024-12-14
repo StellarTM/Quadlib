@@ -45,6 +45,7 @@ public class JS {
                 mthds.get(method.getName()).add(method);
                 Alias[] aliases = method.getAnnotationsByType(Alias.class);
                 for (Alias alias : aliases) {
+                    mthds.putIfAbsent(alias.value(),Seq.with());
                     mthds.get(alias.value()).add(method);
                 }
             }

@@ -1,4 +1,4 @@
-package com.skoow.quadlib.utilities;
+package com.skoow.quadlib.utilities.math;
 
 public class Mathf {
     /** Distance between two 3D points*/
