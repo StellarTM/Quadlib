@@ -1,11 +1,34 @@
 package com.skoow.quadlib.utilities.math;
 
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.world.entity.Entity;
+
 public class Vec3 {
     public float x,y,z;
     public Vec3(float x, float y, float z) {
         this.x = x;
         this.y = y;
         this.z = z;
+    }
+
+    public CompoundTag save() {
+        CompoundTag tag = new CompoundTag();
+        tag.putFloat("x",x);
+        tag.putFloat("y",y);
+        tag.putFloat("z",z);
+        return tag;
+    }
+    public static Vec3 from(CompoundTag tag) {
+        return new Vec3(
+                tag.getFloat("x"),
+                tag.getFloat("y"),
+                tag.getFloat("z")
+        );
+    }
+    public static Vec3 from(Entity entity) {
+        return new Vec3(
+                (float) entity.getX(), (float) entity.getY(), (float) entity.getZ()
+        );
     }
 
     public static Vec3 zero() {
@@ -79,6 +102,9 @@ public class Vec3 {
 
         return this;
     }
+    public Vec3 rotate(Vec3 angle) {
+        return rotate(angle.x,angle.y,angle.z);
+    }
 
     public Vec3 z(float z) {
         this.z = z;
@@ -93,6 +119,13 @@ public class Vec3 {
     }
     public Vec3 add(Vec3 vec) {
         return add(vec.x,vec.y,vec.z);
+    }
+
+    public Vec3 sub(float x, float y, float z) {
+        return add(-x,-y,-z);
+    }
+    public Vec3 sub(Vec3 vec) {
+        return sub(vec.x,vec.y,vec.z);
     }
 
     public Vec3 scale(float x, float y, float z) {
