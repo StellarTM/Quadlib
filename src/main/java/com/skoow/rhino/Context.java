@@ -447,7 +447,7 @@ public class Context {
 	 * argument if it is not null or newly allocated scope object which
 	 * is an instance {@link ScriptableObject}.
 	 */
-	public final Scriptable initStandardObjects(ScriptableObject scope) {
+	public final ScriptableObject initStandardObjects(ScriptableObject scope) {
 		return initStandardObjects(scope, false);
 	}
 
