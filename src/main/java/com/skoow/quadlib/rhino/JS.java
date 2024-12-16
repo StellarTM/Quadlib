@@ -3,8 +3,7 @@ package com.skoow.quadlib.rhino;
 import com.skoow.quadlib.utilities.struct.Pair;
 import com.skoow.quadlib.utilities.struct.Seq;
 import com.skoow.rhino.*;
-
-
+import com.skoow.rhino.util.wrap.TypeWrappers;
 import java.lang.reflect.Array;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
@@ -13,7 +12,8 @@ import java.util.HashMap;
 public class JS {
     public static Pair<Context, ScriptableObject> begin() {
         Context context = Context.enter();
-        //todo: тайп врапперы?
+        TypeWrappers wraps = context.getTypeWrappers();
+        Wrappers.register(wraps);
         ScriptableObject scope = context.initStandardObjects(new TopLevel());
         return new Pair<>(context,scope);
     };
