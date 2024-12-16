@@ -1,6 +1,8 @@
 package com.skoow.quadlib.rhino;
 
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
+import com.skoow.quadlib.utilities.MCUtil;
+import com.skoow.quadlib.utilities.func.Prov;
 import com.skoow.quadlib.utilities.math.Vec3;
 import com.skoow.quadlib.utilities.struct.Pair;
 import com.skoow.quadlib.utilities.struct.Structs;
@@ -11,7 +13,9 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.TagParser;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.Block;
@@ -19,6 +23,7 @@ import net.minecraftforge.registries.ForgeRegistries;
 
 import java.util.HashMap;
 import java.util.UUID;
+import java.util.function.Supplier;
 
 public class Wrappers {
     public static void register(TypeWrappers wraps) {
@@ -39,6 +44,22 @@ public class Wrappers {
             if(obj instanceof Vec3 vec) return BlockPos.containing(vec.x,vec.y,vec.z);
             if(obj instanceof Entity e) return e.getOnPos();
             if(obj instanceof NativeArray d) return BlockPos.containing((Double) d.get(0),(Double) d.get(1),(Double) d.get(2));
+            return null;
+        });
+        wraps.register(Player.class,(ctx,obj) -> {
+            if(obj == null) return MCUtil.players().first();
+            if(obj instanceof Player p) return p;
+            if(obj instanceof String str) return MCUtil.players().find(e -> e.getName().getString().equals(str));
+            if(obj instanceof Prov<?> prov) return (Player) prov.get();
+            if(obj instanceof Supplier<?> supp) return (Player) supp.get();
+            return null;
+        });
+        wraps.register(ServerPlayer.class,(ctx, obj) -> {
+            if(obj == null) return MCUtil.players().first();
+            if(obj instanceof ServerPlayer p) return p;
+            if(obj instanceof String str) return MCUtil.players().find(e -> e.getName().getString().equals(str));
+            if(obj instanceof Prov<?> prov) return (ServerPlayer) prov.get();
+            if(obj instanceof Supplier<?> supp) return (ServerPlayer) supp.get();
             return null;
         });
         wraps.register(ItemStack.class,(ctx, obj) -> {
