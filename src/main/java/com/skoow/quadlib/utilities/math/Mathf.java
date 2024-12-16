@@ -37,4 +37,13 @@ public class Mathf {
     public static float clamp(float value){
         return clamp(value, 0f, 1f);
     }
+    /** Clamps floating point to specified points */
+    public static float toFixed(float val, int points) {
+        int pow = powTen(points);
+        return (float) Math.round(val * pow) / pow;
+    }
+    /** 10^pow */
+    public static int powTen(int pow) {
+        return (int) Math.pow(10,pow);
+    }
 }
