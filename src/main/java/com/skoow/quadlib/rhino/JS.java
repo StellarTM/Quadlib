@@ -61,6 +61,49 @@ public class JS {
             });
         }
     }
+    public static void addToScope(ScriptableObject scope, Context ctx, Class<?> clazz, boolean fields, boolean methods) {
+        if (fields) {
+            for (Field field : clazz.getFields()) {
+                if (!field.isAnnotationPresent(Scope.class)) continue;
+                try {
+                    ScriptableObject.putConstProperty(scope, field.getName(), field.get(null), ctx); // Для классов используется null
+                    Alias[] aliases = field.getAnnotationsByType(Alias.class);
+                    for (Alias alias : aliases) {
+                        ScriptableObject.putConstProperty(scope, alias.value(), field.get(null), ctx);
+                    }
+                } catch (IllegalAccessException | NullPointerException e) {
+                    // Обработка исключения, если нужно
+                }
+            }
+        }
+
+        if (methods) {
+            HashMap<String, Seq<Method>> mthds = new HashMap<>();
+                for (Method method : clazz.getMethods()) {
+                    if (!method.isAnnotationPresent(Scope.class)) continue;
+                    try {
+                        mthds.putIfAbsent(method.getName(), Seq.with());
+                        mthds.get(method.getName()).add(method);
+                        Alias[] aliases = method.getAnnotationsByType(Alias.class);
+                        for (Alias alias : aliases) {
+                            mthds.putIfAbsent(alias.value(), Seq.with());
+                            mthds.get(alias.value()).add(method);
+                        }
+                    } catch (NullPointerException ignored) {
+
+                    }
+                }
+
+            mthds.forEach((k, v) -> {
+                Seq<MemberBox> members = Seq.with();
+                for (Method method : v) {
+                    members.add(new MemberBox(method));
+                }
+                MethodWrapperFunction fn = new MethodWrapperFunction(members.toArray(), null); // Здесь тоже null, так как мы работаем с классом
+                ScriptableObject.putConstProperty(scope, k, fn, ctx);
+            });
+        }
+    }
 
 
     public static class MethodWrapperFunction extends NativeJavaMethod {
