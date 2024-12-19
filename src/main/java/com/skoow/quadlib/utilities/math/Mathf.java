@@ -4,13 +4,13 @@ public class Mathf {
     public static final int[] signs = {-1, 1};
     public static final int[] zeroOne = {0, 1};
     public static final boolean[] booleans = {true, false};
-    public static final float PI = 3.1415927f, pi = PI, halfPi = PI/2;
-    public static final float PI2 = PI * 2;
-    public static final float E = 2.7182818f;
-    public static final float radiansToDegrees = 180f / PI;
+    public static final float PI = NumberConst.pi, pi = PI, halfPi = PI/2;
+    public static final float PI2 = NumberConst.tau;
+    public static final float E = NumberConst.e;
+    public static final float radiansToDegrees = 1f / NumberConst.rad;
     public static final float radDeg = radiansToDegrees;
     /** multiply by this to convert from degrees to radians */
-    public static final float degreesToRadians = PI / 180;
+    public static final float degreesToRadians = NumberConst.rad;
     public static final float degRad = degreesToRadians;
     private static final int sinBits = 14; // 16KB. Adjust for accuracy.
     private static final int sinMask = ~(-1 << sinBits);

@@ -2,6 +2,9 @@ package com.skoow.quadlib.utilities.file;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.skoow.quadlib.utilities.func.Cons;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.item.ItemStack;
 
 import java.io.File;
 import java.io.InputStreamReader;
@@ -9,10 +12,18 @@ import java.io.OutputStreamWriter;
 import java.lang.reflect.InvocationTargetException;
 
 import static com.skoow.quadlib.utilities.file.Files.*;
+import static com.skoow.quadlib.utilities.file.TypeAdapters.*;
 
 public class Jsonf {
-    public static final Gson gson = new GsonBuilder().disableHtmlEscaping().setLenient().setPrettyPrinting()
-            .create();
+    private static final GsonBuilder gsonBuilder = new GsonBuilder().disableHtmlEscaping().setLenient().setPrettyPrinting()
+            .registerTypeAdapter(ItemStack.class,           itemStackDeserializer())
+            .registerTypeAdapter(ResourceLocation.class,    resourceLocationDeserializer());
+    public static Gson gson = gsonBuilder.create();
+
+    public static void updateGson(Cons<GsonBuilder> builder) {
+        builder.get(gsonBuilder);
+        gson = gsonBuilder.create();
+    }
 
     public static <T> T jsonToJava(File f, Class<T> classOf) throws InstantiationException, IllegalAccessException, NoSuchMethodException, InvocationTargetException {
         try {

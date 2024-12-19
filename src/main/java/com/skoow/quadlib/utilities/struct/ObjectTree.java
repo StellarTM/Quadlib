@@ -3,7 +3,7 @@ package com.skoow.quadlib.utilities.struct;
 import com.skoow.quadlib.utilities.func.Boolf;
 import com.skoow.quadlib.utilities.func.Cons;
 
-public class ObjectTree<T> {
+public class ObjectTree<T>  {
     protected Seq<T> childObjects = Seq.with();
     protected String name = "";
     protected Seq<ObjectTree<T>> childTrees = Seq.with();

@@ -8,6 +8,9 @@ import java.io.*;
 import java.nio.charset.StandardCharsets;
 
 public class Files {
+    public static <T> T parse(Class<T> clazz, byte[] body, String ext) {
+        return parse(clazz,new String(body,StandardCharsets.UTF_8),ext);
+    }
     public static <T> T parse(Class<T> clazz, String body, String ext) {
         return switch (ext) {
             case "json" -> Jsonf.gson.fromJson(body, clazz);
@@ -115,4 +118,14 @@ public class Files {
             e.printStackTrace();
         }
     }
+    public static void write(File f, byte[] bytes) {
+        try {
+            OutputStream outputStream = new FileOutputStream(f);
+            outputStream.write(bytes);
+            outputStream.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
 }

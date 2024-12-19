@@ -9,6 +9,7 @@ import com.skoow.snakeyaml.representer.Representer;
 
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.util.HashMap;
 
 public class Yamlf {
     public static Yaml yaml;
@@ -38,10 +39,10 @@ public class Yamlf {
         }
     }
     public static <T> T yamlToJava(String s, Class<T> classOf) {
-        return Jsonf.gson.fromJson(yamlToJson(s,classOf),classOf);
+        return Jsonf.gson.fromJson(yamlToJson(s, HashMap.class),classOf);
     }
     public static <T> T yamlToJava(File f, Class<T> classOf) {
-        return Jsonf.gson.fromJson(yamlToJson(f,classOf),classOf);
+        return Jsonf.gson.fromJson(yamlToJson(f, HashMap.class),classOf);
     }
 
     public static void javaToYaml(File f, Object obj) {

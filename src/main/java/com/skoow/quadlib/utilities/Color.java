@@ -64,7 +64,7 @@ public class Color{
     /** the red, green, blue and alpha components **/
     public float r, g, b, a;
 
-    public static int colorToValue(Color color) {
+    public static int intArgb(Color color) {
         // Input color string in RRGGBBAA format
         String rrggbbaa = color.toString(); // Example
 
