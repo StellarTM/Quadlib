@@ -28,6 +28,13 @@ public class ObjectTree<T>  {
     public Seq<T> children() {
         return childObjects;
     };
+    public Seq<T> deepChildren() {
+        Seq<T> thisChildren = children().copy();
+        Seq<T> treesChildren = Seq.with();
+        trees().each(t -> treesChildren.add(t.deepChildren()));
+        thisChildren.addAll(treesChildren);
+        return thisChildren;
+    }
     public Seq<ObjectTree<T>> trees() {
         return childTrees;
     }

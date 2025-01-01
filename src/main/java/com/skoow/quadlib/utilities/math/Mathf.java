@@ -1,5 +1,7 @@
 package com.skoow.quadlib.utilities.math;
 
+import com.skoow.quadlib.utilities.struct.Seq;
+
 public class Mathf {
     public static final int[] signs = {-1, 1};
     public static final int[] zeroOne = {0, 1};
@@ -88,5 +90,27 @@ public class Mathf {
     /** Returns: the input 0-1 value scaled to 0-1-0. */
     public static float slope(float fin){
         return 1f - Math.abs(fin - 0.5f) * 2f;
+    }
+
+    public static float catmullrom(Seq<Float> points, int cur, int next, float t) {
+        int p0Index = Math.max(cur - 1, 0);
+        int p1Index = cur;
+        int p2Index = next;
+        int p3Index = Math.min(next + 1, points.size - 1);
+
+        float p0 = points.get(p0Index);
+        float p1 = points.get(p1Index);
+        float p2 = points.get(p2Index);
+        float p3 = points.get(p3Index);
+
+        float t2 = t * t;
+        float t3 = t2 * t;
+
+        return 0.5f * (
+                (-t3 + 2f * t2 - t) * p0 +
+                        (3f * t3 - 5f * t2 + 2f) * p1 +
+                        (-3f * t3 + 4f * t2 + t) * p2 +
+                        (t3 - t2) * p3
+        );
     }
 }
