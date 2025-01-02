@@ -2,7 +2,9 @@ package com.skoow.quadlib.utilities.struct;
 
 import com.skoow.quadlib.utilities.func.Cons2;
 
-public class Pair<A,B> {
+import java.io.Serializable;
+
+public class Pair<A,B> implements Serializable {
 
     private A first;
     private B second;

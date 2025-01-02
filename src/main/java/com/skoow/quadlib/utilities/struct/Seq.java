@@ -4,12 +4,13 @@ import com.skoow.quadlib.utilities.func.*;
 import com.skoow.quadlib.utilities.sort.Sort;
 
 import javax.annotation.Nullable;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.Iterator;
 import java.util.NoSuchElementException;
 
-public class Seq<T> implements Iterable<T> {
+public class Seq<T> implements Iterable<T>, Serializable {
     /** Debugging variable to count total number of iterators allocated. */
     public static int iteratorsAllocated = 0;
     /**
@@ -966,7 +967,7 @@ public class Seq<T> implements Iterable<T> {
         return iterable.iterator();
     }
 
-    public static class SeqIterable<T> implements Iterable<T>{
+    public static class SeqIterable<T> implements Iterable<T>, Serializable {
         final Seq<T> array;
         final boolean allowRemove;
         private SeqIterator iterator1 = new SeqIterator(), iterator2 = new SeqIterator();
@@ -997,7 +998,7 @@ public class Seq<T> implements Iterable<T> {
             return new SeqIterator();
         }
 
-        private class SeqIterator implements Iterator<T> {
+        private class SeqIterator implements Iterator<T>, Serializable {
             int index;
             boolean done = true;
 

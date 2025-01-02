@@ -1,10 +1,13 @@
 package com.skoow.quadlib.utilities.math;
 
+import com.skoow.quadlib.utilities.struct.Seq;
 import com.skoow.quadlib.utilities.struct.Structs;
 
+import java.io.Serializable;
 import java.util.HashMap;
 
-public interface Interp {
+public interface Interp extends Serializable {
+    Interp catmullrom = a -> Mathf.catmullrom(Seq.with(0f,1f),0,1,a); //only for conditions
     Interp linear = a -> a;
     Interp reverse = a -> 1f - a;
     /** Aka "smoothstep". */
@@ -82,6 +85,7 @@ public interface Interp {
     HashMap<String,Interp> table = Structs.map(
             String.class, Interp.class,
             "linear",linear,
+            "catmullrom",catmullrom,
             "reverse",reverse,
             "smooth",smooth,
             "smooth2",smooth2,

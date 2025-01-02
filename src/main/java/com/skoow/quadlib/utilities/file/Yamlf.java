@@ -44,6 +44,12 @@ public class Yamlf {
     public static <T> T yamlToJava(File f, Class<T> classOf) {
         return Jsonf.gson.fromJson(yamlToJson(f, HashMap.class),classOf);
     }
+    public static <T> T yamlListToJava(String s, Class<T> classOf) {
+        return Jsonf.gson.fromJson(yamlToJson(s, Object[].class),classOf);
+    }
+    public static <T> T yamlListToJava(File f, Class<T> classOf) {
+        return Jsonf.gson.fromJson(yamlToJson(f, Object[].class),classOf);
+    }
 
     public static void javaToYaml(File f, Object obj) {
         try {

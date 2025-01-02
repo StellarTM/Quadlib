@@ -3,12 +3,25 @@ package com.skoow.quadlib.utilities.math;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.entity.Entity;
 
-public class Vec3 {
+import java.io.Serializable;
+
+public class Vec3 implements Serializable {
     public float x,y,z;
     public Vec3(float x, float y, float z) {
         this.x = x;
         this.y = y;
         this.z = z;
+    }
+    public Vec3(double x, double y, double z) {
+        this((float) x,(float) y,(float) z);
+    }
+    public Vec3 lerp(Vec3 next, float p) {
+        set(Mathf.lerp(x,next.x,p),Mathf.lerp(y,next.y,p),Mathf.lerp(z,next.z,p));
+        return this;
+    }
+    public Vec3 lerp(Vec3 next, float p, Interp interp) {
+        set(interp.apply(p,x,next.x),interp.apply(p,y,next.y),interp.apply(p,z,next.z));
+        return this;
     }
 
     public CompoundTag save() {
@@ -136,5 +149,9 @@ public class Vec3 {
     }
     public Vec3 scale(Vec3 vec) {
         return scale(vec.x,vec.y,vec.z);
+    }
+
+    public float len() {
+        return (float) Math.sqrt(x*x+y*y+z*z);
     }
 }

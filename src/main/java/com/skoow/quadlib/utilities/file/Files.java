@@ -13,8 +13,15 @@ public class Files {
     }
     public static <T> T parse(Class<T> clazz, String body, String ext) {
         return switch (ext) {
-            case "json" -> Jsonf.gson.fromJson(body, clazz);
-            case "yaml" -> Yamlf.yamlToJava(body, clazz);
+            case "json", "j" -> Jsonf.gson.fromJson(body, clazz);
+            case "yaml", "yml", "y" -> Yamlf.yamlToJava(body, clazz);
+            default -> null;
+        };
+    }
+    public static <T> T parseList(Class<T> clazz, String body, String ext) {
+        return switch (ext) {
+            case "json", "j" -> Jsonf.gson.fromJson(body, clazz);
+            case "yaml", "yml", "y" -> Yamlf.yamlListToJava(body, clazz);
             default -> null;
         };
     }

@@ -94,8 +94,8 @@ public class Mathf {
 
     public static float catmullrom(Seq<Float> points, int cur, int next, float t) {
         int p0Index = Math.max(cur - 1, 0);
-        int p1Index = cur;
-        int p2Index = next;
+        int p1Index = Math.max(cur, 0);
+        int p2Index = Math.min(next, points.size - 1);
         int p3Index = Math.min(next + 1, points.size - 1);
 
         float p0 = points.get(p0Index);
@@ -112,5 +112,59 @@ public class Mathf {
                         (-3f * t3 + 4f * t2 + t) * p2 +
                         (t3 - t2) * p3
         );
+    }
+    public static float catmullrom(float p0, float p1, float p2, float p3, float t) {
+        float t2 = t * t;
+        float t3 = t2 * t;
+
+        return 0.5f * (
+                (-t3 + 2 * t2 - t) * p0 +
+                        (3 * t3 - 5 * t2 + 2) * p1 +
+                        (-3 * t3 + 4 * t2 + t) * p2 +
+                        (t3 - t2) * p3
+        );
+    }
+    public static float catmullromLength(float p0, float p1, float p2, float p3, int steps) {
+        float length = 0f;
+        float prevValue = catmullrom(p0, p1, p2, p3, 0);
+
+        for (int i = 1; i <= steps; i++) {
+            float t = (float) i / steps;
+            float currentValue = catmullrom(p0, p1, p2, p3, t);
+            length += Math.abs(currentValue - prevValue);
+            prevValue = currentValue;
+        }
+
+        return length;
+    }
+    public static float catmullromLength(Seq<Float> points, int cur, int next, int steps) {
+        int p0Index = Math.max(cur - 1, 0);
+        int p1Index = Math.max(cur, 0);
+        int p2Index = Math.min(next, points.size - 1);
+        int p3Index = Math.min(next + 1, points.size - 1);
+
+        float p0 = points.get(p0Index);
+        float p1 = points.get(p1Index);
+        float p2 = points.get(p2Index);
+        float p3 = points.get(p3Index);
+
+        return catmullromLength(p0,p1,p2,p3,steps);
+    }
+    public static float interpLength(Interp f, float a, float b, int steps) {
+        float length = 0f;
+        float stepSize = (b - a) / steps;
+
+        for (int i = 0; i < steps; i++) {
+            float x1 = a + i * stepSize;
+            float x2 = x1 + stepSize;
+
+            // Вычисляем производную приближённо
+            float df_dx = (f.apply(x2) - f.apply(x1)) / stepSize;
+
+            // Длина шага
+            length += (float) (Math.sqrt(1 + df_dx * df_dx) * stepSize);
+        }
+
+        return length;
     }
 }
