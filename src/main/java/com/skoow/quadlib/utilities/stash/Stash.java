@@ -1,4 +1,4 @@
-package com.skoow.quadlib.utilities;
+package com.skoow.quadlib.utilities.stash;
 
 import com.skoow.quadlib.utilities.struct.Seq;
 

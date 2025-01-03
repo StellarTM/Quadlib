@@ -1,4 +1,4 @@
-package com.skoow.quadlib.utilities;
+package com.skoow.quadlib.utilities.stash;
 
 public class StashObject<T> {
 
