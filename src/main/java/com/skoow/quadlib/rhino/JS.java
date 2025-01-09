@@ -18,7 +18,7 @@ public class JS {
         return new Pair<>(context,scope);
     };
     public static void run(Context context, ScriptableObject scope, String body, String filename) {
-        context.evaluateString(scope,body,filename,0,null);
+        context.evaluateString(scope,body,filename,1,null);
     }
     public static void addToScope(ScriptableObject scope, Context ctx, Object object, boolean fields, boolean methods) {
         if(fields)
