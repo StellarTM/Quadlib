@@ -40,7 +40,8 @@ public abstract class QuadScreen extends Screen {
     }
 
     public void blit(String texture,int x,int y,int cutx,int cuty,int cutw,int cuth,int tw, int th) {
-        localG.blit(new ResourceLocation(assetsId,texture),
+        ResourceLocation location = texture.contains(":") ? new ResourceLocation(texture) : new ResourceLocation(assetsId,texture);
+        localG.blit(location,
                 x,y,cutx,cuty,cutw,cuth,tw,th);
     }
     public void blit(String texture,int x,int y,int tw,int ty) {

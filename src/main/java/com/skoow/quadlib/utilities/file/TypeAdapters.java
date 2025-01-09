@@ -2,6 +2,7 @@ package com.skoow.quadlib.utilities.file;
 
 import com.google.gson.JsonDeserializer;
 import com.google.gson.JsonObject;
+import com.google.gson.JsonPrimitive;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.TagParser;
@@ -13,6 +14,17 @@ import net.minecraftforge.registries.ForgeRegistries;
 public class TypeAdapters {
     public static JsonDeserializer<ItemStack> itemStackDeserializer() {
         return (json, typeOfT, context) -> {
+            if(json.isJsonPrimitive() && ((JsonPrimitive) json).isString()) {
+                String[] splits = json.getAsString().split(" ");
+                String itemLocation = splits[0];
+                int itemCount = 1;
+                if(splits.length == 2) {
+                    itemCount = Integer.parseInt(splits[0]);
+                    itemLocation = splits[1];
+                }
+                Item item = ForgeRegistries.ITEMS.getValue(new ResourceLocation(itemLocation));
+                return new ItemStack(item,itemCount);
+            }
             JsonObject object = json.getAsJsonObject();
             ResourceLocation itemLocation = context.deserialize(object.get("item"), ResourceLocation.class);
             CompoundTag nbt = new CompoundTag();

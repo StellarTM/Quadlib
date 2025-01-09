@@ -3,9 +3,12 @@ package com.skoow.quadlib.utilities.stash;
 import com.skoow.quadlib.utilities.MCUtil;
 import com.skoow.quadlib.utilities.stash.net.SyncStashObjectPacket;
 import com.skoow.quadlib.utilities.struct.Seq;
+import com.skoow.quadlib.utilities.struct.Structs;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraftforge.network.PacketDistributor;
 import net.minecraftforge.network.simple.SimpleChannel;
+
+import java.util.Objects;
 
 public class SyncStash {
     private static int lastId = 0;
@@ -26,13 +29,23 @@ public class SyncStash {
         stash.set(stashObject.getId(),stashObject);
         return stashObject.getId();
     }
+    public static <T> int setAt(int id, T obj) {
+        boolean same = stash.getOrNull(id) == obj;
+        SyncStashObject<T> stashObject = new SyncStashObject<>(obj);
+        stashObject.setId(id);
+        stash.setSize(Math.max(stash.size,stashObject.getId()+1));
+        stash.set(stashObject.getId(),stashObject);
+        if(!same) lastChanged.add(stashObject.getId());
+        return stashObject.getId();
+    }
     public static <T> T get(int obj) {
-        return (T) getStash().get(obj).get();
+        return Structs.safeGet(getStash().getOrNull(obj),a -> (T) a.get());
     }
     public static <T> T getAndDelete(int obj) {
         T stashObject = get(obj);
         lastChanged.add(getStash().get(obj).getId());
-        stash.set(obj,null);
+        stash.remove(obj);
+        if(lastId == obj) lastId--;
         return stashObject;
     }
 

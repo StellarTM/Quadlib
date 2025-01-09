@@ -44,6 +44,15 @@ public class Structs {
         }
         return map;
     }
+    public static <K,V> HashMap<K,V> map(Object... objs) {
+        HashMap<K,V> map = new HashMap<>();
+        for (int i = 0; i < objs.length; i+=2) {
+            K k = (K) objs[i];
+            V v = (V) objs[i+1];
+            map.put(k,v);
+        }
+        return map;
+    }
     public static <K,V> HashMap<V,K> revMap(HashMap<K,V> mapOrig) {
         HashMap<V,K> map = new HashMap<>();
         mapOrig.forEach((k,v) -> map.put(v,k));

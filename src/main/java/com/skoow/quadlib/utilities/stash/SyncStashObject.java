@@ -23,7 +23,6 @@ public class SyncStashObject<T> {
         this.obj = obj;
     }
     public void setId(int id) {
-        if(SyncStash.getStash().get(id) != null && SyncStash.getStash().get(id) != this) return;
         this.id = id;
     }
     public int getId() {
@@ -33,4 +32,5 @@ public class SyncStashObject<T> {
     public byte[] toBytes() {
         return Structs.obj(obj);
     }
+
 }
