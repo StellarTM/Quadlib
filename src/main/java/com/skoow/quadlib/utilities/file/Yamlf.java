@@ -53,7 +53,9 @@ public class Yamlf {
 
     public static void javaToYaml(File f, Object obj) {
         try {
-            yaml.dump(obj,Files.output(f));
+            String str = Jsonf.gson.toJson(obj);
+            HashMap<?,?> map = Jsonf.gson.fromJson(str,HashMap.class);
+            yaml.dump(map,Files.output(f));
         } catch (FileNotFoundException e) {
             throw new RuntimeException(e);
         }

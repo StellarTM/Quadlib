@@ -84,11 +84,21 @@ public abstract class QuadScreen extends Screen {
     @Override
     public void render(GuiGraphics g, int mouseX, int mouseY, float partial) {
         update(g);
+        renderBefore(g,mouseX,mouseY,partial);
         renderChildren(g,mouseX,mouseY,partial);
+        renderAfter(g,mouseX,mouseY,partial);
     }
+    public void renderBefore(GuiGraphics g, int mouseX, int mouseY, float partial) {
 
+    };
+    public void renderAfter(GuiGraphics g, int mouseX, int mouseY, float partial) {
+
+    };
     public void renderChildren(GuiGraphics g, int mouseX, int mouseY, float partial) {
-        for (Renderable renderable : renderables) renderable.render(g,mouseX,mouseY,partial);
+        for (Renderable renderable : renderables) renderChild(renderable,g,mouseX,mouseY,partial);
+    }
+    public void renderChild(Renderable r, GuiGraphics g, int mouseX, int mouseY, float partial) {
+        r.render(g,mouseX,mouseY,partial);
     }
     public <T> T add(T object) {
         if(object instanceof Renderable r) addRenderableOnly(r);
