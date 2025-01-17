@@ -38,6 +38,10 @@ public abstract class QuadScreen extends Screen {
     public void pop() {
         localPose.popPose();
     }
+    public void pop_push() {
+        pop();
+        push();
+    }
 
     public void blit(String texture,int x,int y,int cutx,int cuty,int cutw,int cuth,int tw, int th) {
         ResourceLocation location = texture.contains(":") ? new ResourceLocation(texture) : new ResourceLocation(assetsId,texture);

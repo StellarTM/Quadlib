@@ -81,6 +81,9 @@ public class Color{
         int colorInt = (int) Long.parseLong(aarrggbb, 16);
         return colorInt;
     }
+    public static int intArgb(String str) {
+        return intArgb(valueOf(str));
+    }
 
     public static float relativeLuminance(int colorCode) {
         Color color = new Color(colorCode);

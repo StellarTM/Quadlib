@@ -9,6 +9,13 @@ import java.nio.charset.StandardCharsets;
 
 public class Files {
     public static <T> T parse(Class<T> clazz, byte[] body, String ext) {
+        if(body.length == 0) {
+            try {
+                return clazz.newInstance();
+            } catch (InstantiationException | IllegalAccessException e) {
+                return parse(clazz,new String(body,StandardCharsets.UTF_8),ext);
+            }
+        }
         return parse(clazz,new String(body,StandardCharsets.UTF_8),ext);
     }
     public static <T> T parse(Class<T> clazz, String body, String ext) {
