@@ -1,5 +1,6 @@
 package com.skoow.quadlib.utilities.struct;
 
+import com.skoow.quadlib.Log;
 import com.skoow.quadlib.utilities.func.Cons;
 import com.skoow.quadlib.utilities.func.Func;
 import com.skoow.quadlib.utilities.func.Prov;
@@ -8,7 +9,30 @@ import java.io.*;
 import java.util.HashMap;
 
 public class Structs {
-
+    //todo better system for this stuff
+    public static Object cast(Object obj, String type) {
+        try {
+            return switch (type.toLowerCase()) {
+                case "string","str" -> obj.toString(); // Convert to String
+                case "integer","int","i" -> obj instanceof Number ? Integer.valueOf(((Number) obj).intValue())
+                        : obj instanceof String ? Integer.parseInt((String) obj)
+                        : null;
+                case "double","d" -> obj instanceof Number ? Double.valueOf(((Number) obj).doubleValue())
+                        : obj instanceof String ? Double.parseDouble((String) obj)
+                        : null;
+                case "boolean","b" -> obj instanceof Boolean ? obj
+                        : obj instanceof String ? Boolean.parseBoolean((String) obj)
+                        : null;
+                default -> {
+                    System.err.println("Unsupported type: " + type);
+                    yield null;
+                }
+            };
+        } catch (NumberFormatException | ClassCastException e) {
+            Log.error(e);
+        }
+        return null;
+    }
     public static <A> Prov<A> nil(){
         return () -> null;
     }

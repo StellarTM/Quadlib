@@ -13,6 +13,10 @@ public class Log {
     public static void error(String s,Object...objs) {
         getLogger().error(String.format(s,objs));
     }
+    public static void error(Throwable t) {
+        getLogger().error(t.getMessage());
+        getLogger().trace(t.getMessage(),t);
+    }
     public static void warn(String s,Object...objs) {
         getLogger().warn(String.format(s,objs));
     }
