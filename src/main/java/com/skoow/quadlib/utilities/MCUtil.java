@@ -99,6 +99,10 @@ public class MCUtil {
             return list;
         }
         if(obj instanceof CompoundTag nbt) {
+            if(nbt.contains("PARSER_CHECK")) {
+                String type = nbt.getString("PARSER_CHECK");
+                if(type.equals("boolean")) return nbt.getBoolean("value");
+            }
             Map<String,Object> map = new LinkedHashMap<>();
             for (String k : nbt.getAllKeys())
                 map.put(k,parse(nbt.get(k)));
@@ -119,6 +123,12 @@ public class MCUtil {
         else if(obj instanceof Double d) return DoubleTag.valueOf(d);
         else if(obj instanceof byte[] bs) return new ByteArrayTag(bs);
         else if(obj instanceof String str) return StringTag.valueOf(str);
+        else if(obj instanceof Boolean bool) {
+            CompoundTag wrap = new CompoundTag();
+            wrap.putString("PARSER_CHECK","boolean");
+            wrap.putBoolean("value",bool);
+            return wrap;
+        }
         else if(obj instanceof List<?> l) {
             ListTag tag = new ListTag();
             for (Object o : l)
