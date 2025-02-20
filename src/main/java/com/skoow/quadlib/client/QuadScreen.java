@@ -11,8 +11,11 @@ import net.minecraft.client.gui.components.Renderable;
 import net.minecraft.client.gui.components.events.GuiEventListener;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.FormattedText;
+import net.minecraft.network.chat.Style;
 import net.minecraft.resources.ResourceLocation;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public abstract class QuadScreen extends Screen {
@@ -42,8 +45,26 @@ public abstract class QuadScreen extends Screen {
         pop();
         push();
     }
-
+    public List<FormattedText> lines(Component comp, int width) {
+        return lines(comp.getString(),width,comp.getStyle());
+    }
+    public List<FormattedText> lines(String str, int width, Style style) {
+        List<FormattedText> all = new ArrayList<>();
+        str = str.replace("\\n","\n");
+        str.lines().forEach(e -> {
+            all.addAll(mc().font.getSplitter().splitLines(
+                    e,
+                    width,style
+            ));
+        });
+        return all;
+    }
+    public List<FormattedText> lines(String str, int width) {
+        return lines(str,width,Style.EMPTY);
+    }
     public void blit(String texture,int x,int y,int cutx,int cuty,int cutw,int cuth,int tw, int th) {
+        if(texture == null) return;
+        if(texture.isBlank()) return;
         ResourceLocation location = texture.contains(":") ? new ResourceLocation(texture) : new ResourceLocation(assetsId,texture);
         localG.blit(location,
                 x,y,cutx,cuty,cutw,cuth,tw,th);
