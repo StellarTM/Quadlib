@@ -702,13 +702,17 @@ public class NativeJavaObject implements Scriptable, SymbolScriptable, Wrapper {
 			members.put(this, name, javaObject, value, false, cx);
 			Alias[] aliases = value.getClass().getAnnotationsByType(Alias.class);
 			for (Alias alias : aliases) {
-				members.put(this, alias.value(), javaObject, value, false, cx);
+				for (String s : alias.value()) {
+					members.put(this, s, javaObject, value, false, cx);
+				}
 			}
 		} else {
 			prototype.put(cx, name, prototype, value);
 			Alias[] aliases = value.getClass().getAnnotationsByType(Alias.class);
 			for (Alias alias : aliases) {
-				prototype.put(cx, alias.value(), prototype, value);
+				for (String s : alias.value()) {
+					prototype.put(cx, s, prototype, value);
+				}
 			}
 		}
 	}
@@ -723,13 +727,17 @@ public class NativeJavaObject implements Scriptable, SymbolScriptable, Wrapper {
 			members.put(this, name, javaObject, value, false, cx);
 			Alias[] aliases = value.getClass().getAnnotationsByType(Alias.class);
 			for (Alias alias : aliases) {
-				members.put(this, alias.value(), javaObject, value, false, cx);
+				for (String s : alias.value()) {
+					members.put(this, s, javaObject, value, false, cx);
+				}
 			}
 		} else if (prototype instanceof SymbolScriptable) {
 			((SymbolScriptable) prototype).put(cx, symbol, prototype, value);
 			Alias[] aliases = value.getClass().getAnnotationsByType(Alias.class);
 			for (Alias alias : aliases) {
-				prototype.put(cx, alias.value(), prototype, value);
+				for (String s : alias.value()) {
+					prototype.put(cx, s, prototype, value);
+				}
 			}
 		}
 	}

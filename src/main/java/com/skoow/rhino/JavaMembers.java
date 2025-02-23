@@ -723,10 +723,12 @@ public class JavaMembers {
 							}
 							Alias[] aliases = field.getAnnotationsByType(Alias.class);
 							for (Alias alias : aliases) {
-								if (!fieldMap.containsKey(alias.value())) {
-									FieldInfo info2 = new FieldInfo(field);
-									info2.name = alias.value();
-									fieldMap.put(info2.name, info2);
+								for (String s : alias.value()) {
+									if (!fieldMap.containsKey(s)) {
+										FieldInfo info2 = new FieldInfo(field);
+										info2.name = s;
+										fieldMap.put(info2.name, info2);
+									}
 								}
 							}
 						} catch (Exception ex) {
@@ -784,10 +786,12 @@ public class JavaMembers {
 
 							Alias[] aliases = method.getAnnotationsByType(Alias.class);
 							for (Alias alias : aliases) {
-								MethodSignature sign2 = new MethodSignature(alias.value(),method.getParameterCount() == 0 ? new Class<?>[0] : method.getParameterTypes());
-								MethodInfo info2 = new MethodInfo(method);
-								info2.name = alias.value();
-								methodMap.put(sign2, info2);
+								for (String s : alias.value()) {
+									MethodSignature sign2 = new MethodSignature(s,method.getParameterCount() == 0 ? new Class<?>[0] : method.getParameterTypes());
+									MethodInfo info2 = new MethodInfo(method);
+									info2.name = s;
+									methodMap.put(sign2, info2);
+								}
 							}
 						} catch (Exception ex) {
 							// ex.printStackTrace();

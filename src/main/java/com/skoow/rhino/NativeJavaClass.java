@@ -174,7 +174,9 @@ public class NativeJavaClass extends NativeJavaObject implements Function {
 		members.put(this, name, javaObject, value, true, cx);
 		Alias[] aliases = value.getClass().getAnnotationsByType(Alias.class);
 		for (Alias alias : aliases) {
-			members.put(this, alias.value(), javaObject, value, true, cx);
+			for (String s : alias.value()) {
+				members.put(this, s, javaObject, value, true, cx);
+			}
 		}
 	}
 
