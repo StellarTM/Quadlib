@@ -30,9 +30,11 @@ public class JS {
                     );
                     Alias[] aliases = field.getAnnotationsByType(Alias.class);
                     for (Alias alias : aliases) {
-                        ScriptableObject.putConstProperty(
-                                scope,alias.value(),field.get(object),ctx
-                        );
+                        for (String s : alias.value()) {
+                            ScriptableObject.putConstProperty(
+                                    scope,s,field.get(object),ctx
+                            );
+                        }
                     }
                 } catch (IllegalAccessException e) {
 
@@ -46,8 +48,10 @@ public class JS {
                 mthds.get(method.getName()).add(method);
                 Alias[] aliases = method.getAnnotationsByType(Alias.class);
                 for (Alias alias : aliases) {
-                    mthds.putIfAbsent(alias.value(),Seq.with());
-                    mthds.get(alias.value()).add(method);
+                    for (String s : alias.value()) {
+                        mthds.putIfAbsent(s,Seq.with());
+                        mthds.get(s).add(method);
+                    }
                 }
             }
             mthds.forEach((k,v) -> {
@@ -70,7 +74,9 @@ public class JS {
                     ScriptableObject.putConstProperty(scope, field.getName(), field.get(null), ctx); // Для классов используется null
                     Alias[] aliases = field.getAnnotationsByType(Alias.class);
                     for (Alias alias : aliases) {
-                        ScriptableObject.putConstProperty(scope, alias.value(), field.get(null), ctx);
+                        for (String s : alias.value()) {
+                            ScriptableObject.putConstProperty(scope, s, field.get(null), ctx);
+                        }
                     }
                 } catch (IllegalAccessException | NullPointerException e) {
                     // Обработка исключения, если нужно
@@ -87,8 +93,10 @@ public class JS {
                         mthds.get(method.getName()).add(method);
                         Alias[] aliases = method.getAnnotationsByType(Alias.class);
                         for (Alias alias : aliases) {
-                            mthds.putIfAbsent(alias.value(), Seq.with());
-                            mthds.get(alias.value()).add(method);
+                            for (String s : alias.value()) {
+                                mthds.putIfAbsent(s, Seq.with());
+                                mthds.get(s).add(method);
+                            }
                         }
                     } catch (NullPointerException ignored) {
 
