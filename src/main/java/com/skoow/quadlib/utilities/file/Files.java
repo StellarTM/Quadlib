@@ -19,6 +19,15 @@ public class Files {
         return parse(clazz,new String(body,StandardCharsets.UTF_8),ext);
     }
     public static <T> T parse(Class<T> clazz, String body, String ext) {
+        if(body.isEmpty()) {
+            try {
+                return clazz.newInstance();
+            } catch (InstantiationException e) {
+
+            } catch (IllegalAccessException e) {
+
+            }
+        }
         return switch (ext) {
             case "json", "j" -> Jsonf.gson.fromJson(body, clazz);
             case "yaml", "yml", "y" -> Yamlf.yamlToJava(body, clazz);
