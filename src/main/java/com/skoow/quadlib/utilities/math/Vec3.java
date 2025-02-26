@@ -24,6 +24,36 @@ public class Vec3 implements Serializable {
         return this;
     }
 
+    public Vec3 constraintMin(Vec3 to, float constraint) {
+        return constraintMin(to,constraint,1f);
+    }
+    public Vec3 constraintMin(Vec3 to, float constraint,float speed) {
+        return constraint(to,constraint,true,false,speed);
+    }
+    public Vec3 constraintMax(Vec3 to, float constraint) {
+        return constraintMax(to,constraint,1f);
+    }
+    public Vec3 constraintMax(Vec3 to, float constraint,float speed) {
+        return constraint(to,constraint,false,true,speed);
+    }
+    public Vec3 constraint(Vec3 to, float constraint,boolean min,boolean max,float speed) {
+        Vec3 vec = to.cpy().sub(this);
+        float len = vec.len();
+        if((max && len > constraint) || (min && len < constraint)) {
+            float step = (len-constraint)*speed;
+            Vec3 norVec = vec.cpy().nor().scale(step);
+            add(norVec);
+        }
+        return this;
+    }
+    /**
+     * Normalizes this vector.
+     * @return this vector after normalization
+     */
+    public Vec3 nor() {
+        return scale(1 / len());
+    }
+
     public CompoundTag save() {
         CompoundTag tag = new CompoundTag();
         tag.putFloat("x",x);
